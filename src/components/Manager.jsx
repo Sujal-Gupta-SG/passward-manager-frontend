@@ -1,52 +1,14 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PassForm from "./PassForm";
 import ShowPass from "./ShowPass";
 
-const Manager = ({ user }) => {
-  const [passwordArray, setPasswordArray] = useState([]);
+const Manager = ({ user, passwordArray, setPasswordArray }) => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
 
-  const getPasswords = async () => {
-    try {
-      // Make sure to use the correct mode and endpoint
-      let req = await fetch(
-        `${import.meta.env.VITE_API_URL}?s=${encodeURIComponent(
-          user.displayName
-        )}&e=${encodeURIComponent(user.email)}`
-      );
-
-      if (req.ok) {
-        let data = await req.json();
-
-        // Assuming the data format returned from your API is an array
-        // and you want to process it accordingly
-        const formattedPasswords = data.map((item) => ({
-          id: item._id.$oid, // Extract the ObjectId
-          site: item.form.site,
-          username: item.form.username,
-          password: item.form.password,
-          displayName: item.user.displayName,
-          email: item.user.email,
-        }));
-
-        setPasswordArray(formattedPasswords); // Update the password array with the processed data
-      } else {
-        console.error("Error fetching passwords:", req.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching passwords:", error);
-    }
-  };
-
-  // Fetch passwords when the component mounts
-  useEffect(() => {
-    if (user?.displayName && user?.email) {
-      getPasswords();
-    }
-  }, [user]); // Make sure useEffect runs only when the user object changes
+  // Make sure useEffect runs only when the user object changes
 
   return (
     <>
@@ -99,5 +61,14 @@ Manager.propTypes = {
     displayName: PropTypes.string.isRequired, // displayName is required
     email: PropTypes.string.isRequired, // email is required
   }).isRequired, // user object is required
+  passwordArray: PropTypes.arrayOf(
+    PropTypes.shape({
+      site: PropTypes.string,
+      username: PropTypes.string,
+      password: PropTypes.string,
+      id: PropTypes.string,
+    })
+  ).isRequired, // passwordArray is required and should be an array of objects
+  setPasswordArray: PropTypes.func.isRequired, // setPasswordArray function is required
 };
 export default Manager;

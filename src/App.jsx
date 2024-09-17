@@ -11,6 +11,7 @@ import SigninButton from "./components/SigninButton";
 function App() {
   const [user, setUser] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [passwordArray, setPasswordArray] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -26,13 +27,52 @@ function App() {
     };
   }, []);
 
+  const getPasswords = async () => {
+    try {
+      // Make sure to use the correct mode and endpoint
+      let req = await fetch(
+        `${import.meta.env.VITE_API_URL}?s=${encodeURIComponent(
+          user.displayName
+        )}&e=${encodeURIComponent(user.email)}`
+      );
+
+      if (req.ok) {
+        let data = await req.json();
+
+        // Assuming the data format returned from your API is an array
+        // and you want to process it accordingly
+        const formattedPasswords = data.map((item) => ({
+          id: item._id.$oid, // Extract the ObjectId
+          site: item.form.site,
+          username: item.form.username,
+          password: item.form.password,
+          displayName: item.user.displayName,
+          email: item.user.email,
+        }));
+
+        setPasswordArray(formattedPasswords); // Update the password array with the processed data
+      } else {
+        console.error("Error fetching passwords:", req.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching passwords:", error);
+    }
+  };
+
+  // Fetch passwords when the component mounts
+  useEffect(() => {
+    if (user?.displayName && user?.email) {
+      getPasswords();
+    }
+  }, [user]);
+
   // Sign in with GitHub function
   const signInWithGithub = async () => {
     try {
       await signInWithPopup(auth, githubProvider);
       const loggedInUser = auth.currentUser;
       toast.success(`Welcome, ${loggedInUser?.displayName || "User"}`);
-      console.log(auth);
+      getPasswords();
     } catch (error) {
       toast.error(`GitHub sign-in error: ${error.message}`);
     }
@@ -44,6 +84,7 @@ function App() {
       await signInWithPopup(auth, googleProvider);
       const loggedInUser = auth.currentUser;
       toast.success(`Welcome, ${loggedInUser?.displayName || "User"}`);
+      getPasswords();
     } catch (error) {
       toast.error(`Google sign-in error: ${error.message}`);
     }
@@ -54,6 +95,7 @@ function App() {
     try {
       await signOut(auth);
       toast.info("Signed out successfully");
+      setPasswordArray([]);
     } catch (error) {
       toast.error(`Sign-out error: ${error.message}`);
     }
@@ -81,7 +123,11 @@ function App() {
 
         <main className="flex-grow">
           {user ? (
-            <Manager user={user} />
+            <Manager
+              user={user}
+              passwordArray={passwordArray}
+              setPasswordArray={setPasswordArray}
+            />
           ) : (
             <div>Please sign in to continue</div>
           )}{" "}
