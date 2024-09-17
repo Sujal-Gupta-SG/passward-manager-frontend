@@ -5,7 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "0.0.0.0", // This allows external access
-     
+    port: import.meta.env.PORT || 5173
   },
 });

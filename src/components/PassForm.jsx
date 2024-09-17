@@ -78,7 +78,7 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
         // Check for existing password and delete if found
         await handleFormCheckAndDelete(form);
 
-        const newPassword = form;
+        
 
         // Make a POST request to save the new password
         const postResponse = await fetch(
@@ -87,7 +87,7 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              ...newPassword,
+              form,
               user: {
                 displayName: user.displayName,
                 email: user.email,
