@@ -60,7 +60,11 @@ const ShowPass = ({
       } else {
         toast.error("error");
       }
-      setform(passwordToEdit);
+      setform({
+        site: passwordToEdit.site,
+        username: passwordToEdit.username,
+        password: passwordToEdit.password,
+      });
     } else {
       toast.error("Password with the given id not found");
       // Optionally, show a message to the user if the password isn't found
