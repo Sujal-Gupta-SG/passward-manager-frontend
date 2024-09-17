@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PassForm from "./PassForm";
 import ShowPass from "./ShowPass";
 
-const Manager = ({ user, passwordArray, setPasswordArray }) => {
+const Manager = ({ user, passwordArray, setPasswordArray, getPasswords }) => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
 
   // Make sure useEffect runs only when the user object changes
@@ -32,12 +32,14 @@ const Manager = ({ user, passwordArray, setPasswordArray }) => {
           setPasswordArray={setPasswordArray}
           form={form}
           setform={setform}
+          getPasswords={getPasswords}
         />
         <ShowPass
           user={user}
           passwordArray={passwordArray}
           setPasswordArray={setPasswordArray}
           setform={setform}
+          getPasswords={getPasswords}
         />
       </div>
       <ToastContainer
@@ -69,6 +71,7 @@ Manager.propTypes = {
       id: PropTypes.string,
     })
   ).isRequired, // passwordArray is required and should be an array of objects
-  setPasswordArray: PropTypes.func.isRequired, // setPasswordArray function is required
+  setPasswordArray: PropTypes.func.isRequired,
+  getPasswords: PropTypes.func.isRequired, // setPasswordArray function is required
 };
 export default Manager;

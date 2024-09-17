@@ -3,7 +3,14 @@ import PropTypes from "prop-types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
+const PassForm = ({
+  user,
+  passwordArray,
+  setPasswordArray,
+  form,
+  setform,
+  getPasswords,
+}) => {
   const ref = useRef();
   const passwordRef = useRef();
 
@@ -96,8 +103,15 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
         if (!postResponse.ok) {
           // Read the response body for details
           const errorData = await postResponse.text();
-          console.error('Error saving password:', postResponse.status, postResponse.statusText, errorData);
-          throw new Error(`Error ${postResponse.status}: ${postResponse.statusText}`);
+          console.error(
+            "Error saving password:",
+            postResponse.status,
+            postResponse.statusText,
+            errorData
+          );
+          throw new Error(
+            `Error ${postResponse.status}: ${postResponse.statusText}`
+          );
         }
 
         if (postResponse.ok) {
@@ -105,6 +119,7 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
           setPasswordArray([...passwordArray, savedPassword]);
           setform({ site: "", username: "", password: "" });
           toast.success("Password saved!");
+          getPasswords();
         } else {
           toast.error("Error saving the password.");
         }
@@ -212,6 +227,7 @@ PassForm.propTypes = {
     id: PropTypes.string,
   }).isRequired, // form object is required
   setform: PropTypes.func.isRequired, // setform function is required
+  getPasswords: PropTypes.func.isRequired,
 };
 
 export default PassForm;

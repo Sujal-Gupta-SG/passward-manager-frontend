@@ -38,17 +38,18 @@ function App() {
 
       if (req.ok) {
         let data = await req.json();
-
+        console.log(data);
         // Assuming the data format returned from your API is an array
         // and you want to process it accordingly
         const formattedPasswords = data.map((item) => ({
-          id: item._id.$oid, // Extract the ObjectId
+          id: item._id, // Extract the ObjectId
           site: item.form.site,
           username: item.form.username,
           password: item.form.password,
           displayName: item.user.displayName,
           email: item.user.email,
         }));
+        console.log(formattedPasswords);
 
         setPasswordArray(formattedPasswords); // Update the password array with the processed data
       } else {
@@ -127,6 +128,7 @@ function App() {
               user={user}
               passwordArray={passwordArray}
               setPasswordArray={setPasswordArray}
+              getPasswords={getPasswords}
             />
           ) : (
             <div>Please sign in to continue</div>
