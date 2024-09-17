@@ -109,7 +109,12 @@ const ShowPass = ({ passwordArray, setPasswordArray, setform }) => {
                     </td>
                     <td className="py-2 border border-white text-center">
                       <div className="flex items-center justify-center ">
-                        <span>{"*".repeat(item.password.length)}</span>
+                        <span>
+                          {item.password
+                            ? "*".repeat(item.password.length)
+                            : ""}
+                        </span>
+
                         <div
                           className="lordiconcopy size-7 cursor-pointer"
                           onClick={() => {

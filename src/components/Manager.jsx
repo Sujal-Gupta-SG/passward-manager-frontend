@@ -11,16 +11,28 @@ const Manager = ({ user }) => {
 
   const getPasswords = async () => {
     try {
+      // Make sure to use the correct mode and endpoint
       let req = await fetch(
-        `${import.meta.env.VITE_API_URL}?s=${user.displayName}&e=${user.email}`,
-        {
-          mode: "no-cors", // Try disabling CORS
-        }
+        `${import.meta.env.VITE_API_URL}?s=${encodeURIComponent(
+          user.displayName
+        )}&e=${encodeURIComponent(user.email)}`
       );
 
       if (req.ok) {
-        let passwords = await req.json();
-        setPasswordArray(passwords); // Update the password array with the response data
+        let data = await req.json();
+
+        // Assuming the data format returned from your API is an array
+        // and you want to process it accordingly
+        const formattedPasswords = data.map((item) => ({
+          id: item._id.$oid, // Extract the ObjectId
+          site: item.form.site,
+          username: item.form.username,
+          password: item.form.password,
+          displayName: item.user.displayName,
+          email: item.user.email,
+        }));
+
+        setPasswordArray(formattedPasswords); // Update the password array with the processed data
       } else {
         console.error("Error fetching passwords:", req.statusText);
       }
