@@ -69,7 +69,6 @@ const PassForm = ({
           }
         }
       } catch (error) {
-        console.error("Error occurred while checking or deleting form:", error);
         toast.error("Error checking or deleting the password.");
       }
     }
@@ -103,7 +102,7 @@ const PassForm = ({
         if (!postResponse.ok) {
           // Read the response body for details
           const errorData = await postResponse.text();
-          console.error(
+          toast.error(
             "Error saving password:",
             postResponse.status,
             postResponse.statusText,
@@ -124,7 +123,6 @@ const PassForm = ({
           toast.error("Error saving the password.");
         }
       } catch (error) {
-        console.error("Error saving password:", error);
         toast.error("Error occurred while saving the password.");
       }
     } else {

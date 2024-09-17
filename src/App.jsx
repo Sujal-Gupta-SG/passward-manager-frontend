@@ -38,7 +38,6 @@ function App() {
 
       if (req.ok) {
         let data = await req.json();
-        console.log(data);
         // Assuming the data format returned from your API is an array
         // and you want to process it accordingly
         const formattedPasswords = data.map((item) => ({
@@ -49,14 +48,13 @@ function App() {
           displayName: item.user.displayName,
           email: item.user.email,
         }));
-        console.log(formattedPasswords);
 
         setPasswordArray(formattedPasswords); // Update the password array with the processed data
       } else {
-        console.error("Error fetching passwords:", req.statusText);
+        toast.error("Error fetching passwords:", req.statusText);
       }
     } catch (error) {
-      console.error("Error fetching passwords:", error);
+      toast.error("Error fetching passwords:", error);
     }
   };
 
