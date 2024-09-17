@@ -78,8 +78,6 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
         // Check for existing password and delete if found
         await handleFormCheckAndDelete(form);
 
-        
-
         // Make a POST request to save the new password
         const postResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/save`,
@@ -95,6 +93,12 @@ const PassForm = ({ user, passwordArray, setPasswordArray, form, setform }) => {
             }),
           }
         );
+        if (!postResponse.ok) {
+          // Read the response body for details
+          const errorData = await postResponse.text();
+          console.error('Error saving password:', postResponse.status, postResponse.statusText, errorData);
+          throw new Error(`Error ${postResponse.status}: ${postResponse.statusText}`);
+        }
 
         if (postResponse.ok) {
           const savedPassword = await postResponse.json();
