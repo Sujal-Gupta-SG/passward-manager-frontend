@@ -132,5 +132,5 @@ The frontend interacts with the backend using **Axios** to perform CRUD operatio
 
 ## License
 
-This project is licensed under the MIT License. Feel free to use and modify the frontend as needed.
+ Feel free to use and modify the frontend as needed.
 
