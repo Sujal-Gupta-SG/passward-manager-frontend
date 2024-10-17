@@ -61,7 +61,7 @@ The landing page where users are introduced to PassOp. It provides an overview o
 The main interface for managing passwords:
 - **Add Password**: Form to add new password entries.
 - **View Passwords**: Displays a list of saved passwords with options to view, copy, and delete.
-- **Search**: Allows users to search through their saved passwords by site or username.
+
 
 ### Components
 
